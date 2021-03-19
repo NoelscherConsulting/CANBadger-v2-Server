@@ -30,3 +30,4 @@ $ python3 main.py
 ## Attributions
 "entypo icons" by Daniel Bruce - CC BY-SA 4.0
 
+Currently, the CANBadger Automotive Security Platform is maintained by [Noelscher Consulting GmbH](https://noelscher.com).
