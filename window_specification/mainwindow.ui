@@ -1,0 +1,1020 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>CanBadger Server</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>8</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="settingsTab">
+       <attribute name="title">
+        <string>Interface Settings</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QGroupBox" name="interfaceSelectionGrpBox">
+          <property name="title">
+           <string>Select Interface</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QComboBox" name="interfaceSelection">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <item>
+                <property name="text">
+                 <string>None</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="resetBtn">
+               <property name="text">
+                <string>Reset CB</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="canbadgerSettingsGrpBox">
+          <property name="title">
+           <string>CanBadger Settings</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout">
+           <item row="1" column="0">
+            <layout class="QGridLayout" name="canbadgerSettingLayout">
+             <item row="0" column="1">
+              <widget class="QLineEdit" name="nodeIdLineEdit"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="nodeIdEditLabel">
+               <property name="text">
+                <string>Node ID:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="canSettingsGrpBox">
+          <property name="title">
+           <string>CAN Settings</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="5" column="0">
+            <widget class="QComboBox" name="CAN1SpeedSelection">
+             <item>
+              <property name="text">
+               <string/>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>20000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>33333</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>40000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>50000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>62500</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>83333</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>100000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>125000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>250000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>500000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>750000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>800000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1000000</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QComboBox" name="CAN2SpeedSelection">
+             <item>
+              <property name="text">
+               <string/>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>20000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>33333</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>40000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>50000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>62500</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>83333</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>100000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>125000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>250000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>500000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>750000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>800000</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>1000000</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="enableBRIDGE1Checkbox">
+             <property name="text">
+              <string>Bridge CAN1</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="enableCAN1Checkbox">
+             <property name="text">
+              <string>Logging CAN1</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="enableCAN2Checkbox">
+             <property name="text">
+              <string>Logging CAN2</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="CAN2SpeedLabel">
+             <property name="text">
+              <string>CAN2 Speed:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QCheckBox" name="enableBRIDGE2Checkbox">
+             <property name="text">
+              <string>Bridge CAN2</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="CAN1SpeedLabel">
+             <property name="text">
+              <string>CAN1 Speed:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QPushButton" name="saveNodeSettingsBtn">
+            <property name="text">
+             <string>Save</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="eepromBtn">
+            <property name="text">
+             <string>Store in EEPROM</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="loggerTab">
+       <attribute name="title">
+        <string>Logger</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_12">
+        <item>
+         <layout class="QHBoxLayout" name="filterLayout">
+          <item>
+           <widget class="QGroupBox" name="lineFilterLayout">
+            <property name="title">
+             <string>Filter by ID</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_13">
+             <item>
+              <widget class="QLineEdit" name="filterFramesByIdLineEdit">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter by frame id.&lt;/p&gt;&lt;p&gt;You can enter multiple IDs, separated by comma.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Example: 0080,0081&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string extracomment="comma separated ids"/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="payloadFilterLayout">
+            <property name="title">
+             <string>Filter by Payload</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_14">
+             <item>
+              <widget class="QLineEdit" name="payloadFilterLineEdit">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Filter frame payloads to match your input:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;- bytes seperated by whitespaces (0a B7 cC)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;- _ is a wildcard byte&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;- * is 0..n wildcard bytes&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt;&quot;&gt;Example input: _ f5 * AC&lt;br/&gt;matches all payloads with 2nd byte F5 and ending on AC. &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="miscFilterGrid">
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="highlightCheckbox">
+              <property name="text">
+               <string>Highlight Changes</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QCheckBox" name="compactFilterCheckbox">
+              <property name="text">
+               <string>Compact View</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="filterFramesByNewFramesAfterCheckbox">
+              <property name="text">
+               <string>only show new IDs after</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QSpinBox" name="filterFramesAfterNSpinBox">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Show only frames from new IDs that are recorded after $value frames&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="CanLoggerTreeView" name="canLogView">
+          <property name="verticalScrollMode">
+           <enum>QAbstractItemView::ScrollPerItem</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="logButtonsLayout">
+          <item>
+           <widget class="QToolButton" name="saveCanLogBtn">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save logged frames to a JSON file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>icons/save.svg</normaloff>icons/save.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QToolButton" name="restoreCanLogBtn">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>icons/back-in-time.svg</normaloff>icons/back-in-time.svg</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="startCanLoggerBtn">
+            <property name="text">
+             <string>Not Connected</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="replayTab">
+       <attribute name="title">
+        <string>Replay</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QGroupBox" name="groupBox_2">
+          <property name="title">
+           <string>Frame Sequence</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_10">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <item>
+              <widget class="QToolButton" name="replayMoveUpBtn">
+               <property name="text">
+                <string>↑</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="replayMoveDownBtn">
+               <property name="text">
+                <string>↓</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="replayRemoveFrameBtn">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Remove</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="addReplayFrameBtn">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="text">
+                <string>Add</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTableView" name="replayFramesTableView"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Modify Frame</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Count</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="replayCountLineEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_19">
+               <property name="text">
+                <string>ID</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="replayFrameIdLineEdit">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="text">
+                <string>Interface</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="replayInterfaceSelection">
+               <item>
+                <property name="text">
+                 <string>1</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>2</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_20">
+             <property name="text">
+              <string>Payload (HEX)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="replayPayloadLineEdit">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="startReplayBtn">
+          <property name="text">
+           <string>Start Replay</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="mitmTab">
+       <attribute name="title">
+        <string>MITM</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QGroupBox" name="rulesGroupBox">
+          <property name="title">
+           <string>Rules</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <layout class="QHBoxLayout" name="MITMTopLayout">
+             <item>
+              <widget class="QToolButton" name="loadRulesFromFileBtn">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Load rules from a valid txt file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>icons/back-in-time.svg</normaloff>icons/back-in-time.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="saveRulesToFileBtn">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save rules to a txt file&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+               <property name="icon">
+                <iconset>
+                 <normaloff>icons/save.svg</normaloff>icons/save.svg</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_front">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeType">
+                <enum>QSizePolicy::Minimum</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="ruleNameLineEdit">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enter filename the rules will be stored under on the canbadger.&lt;/p&gt;&lt;p&gt;File has to be a .txt, max. 16 chars.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="placeholderText">
+                <string>Desired Filename (e.g. rules.txt)</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="saveRulesBtn">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Save Rules on the canbadger SD&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="text">
+                <string>Upload Rules</string>
+               </property>
+               <property name="flat">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="MITMFileButton">
+               <property name="text">
+                <string>MITM from File</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_back">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="removeRuleBtn">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="text">
+                <string>Remove</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="addRuleBtn">
+               <property name="text">
+                <string>Add</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QTableView" name="rulesTableView"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="ruleSettingsGroupBox">
+          <property name="title">
+           <string>Rule Settings</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_9">
+           <item row="2" column="1">
+            <widget class="QLineEdit" name="conditionMessageIdLineEdit">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The frame id will always be matched against this value&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="maxLength">
+              <number>4</number>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="1">
+            <widget class="QLineEdit" name="actionMaskLineEdit">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Bytemask for the rule actions that require specific bytes:&lt;/p&gt;&lt;p&gt;A 1 will match a byte and a 0 will ignore the byte. (Leftmost ist MSB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="maxLength">
+              <number>80</number>
+             </property>
+             <property name="cursorPosition">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="argumentLabel">
+             <property name="text">
+              <string>Action Argument:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="ruleConditionLabel">
+             <property name="text">
+              <string>Condition:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QLineEdit" name="actionArgumentLineEdit">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="ruleActionLabel">
+             <property name="text">
+              <string>Action:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="ruleCondComboBox">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Condition:&lt;/p&gt;&lt;p&gt;Frames are first matched by ID and then, it will try to match the condition specified here.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="ruleTypeComboBox">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QLineEdit" name="conditionMaskLineEdit">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Bytemask for the rule condition:&lt;/p&gt;&lt;p&gt;A 1 will match a byte and a 0 will ignore the byte. (Leftmost ist MSB)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="conditionMaskLabel">
+             <property name="text">
+              <string>Condition Mask:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="conditionTargetMessageIdLabel">
+             <property name="text">
+              <string>Target Frame ID:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="0">
+            <widget class="QLabel" name="secondConditionValueLabel">
+             <property name="text">
+              <string>Action Mask</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLineEdit" name="conditionValueLineEdit">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>Condition Value:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="startMITMButton">
+          <property name="text">
+           <string>Start MITM</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="sdCardTab">
+       <attribute name="title">
+        <string>Manage SD Card</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_8">
+        <item row="5" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <item>
+           <widget class="QPushButton" name="deleteFileBtn">
+            <property name="text">
+             <string>Delete File</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="downloadFileBtn">
+            <property name="text">
+             <string>Download File</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="uploadFileBtn">
+            <property name="text">
+             <string>Upload File</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>Folder:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="sdCardFolderLineEdit">
+            <property name="text">
+             <string>/</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="refreshSdCardBtn">
+            <property name="text">
+             <string>Refresh</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="SDTreeView" name="sdCardTreeView"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1000</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionExit"/>
+   </widget>
+   <addaction name="menuFile"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionLoad_config">
+   <property name="text">
+    <string>Load config</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CanLoggerTreeView</class>
+   <extends>QTreeView</extends>
+   <header>views</header>
+  </customwidget>
+  <customwidget>
+   <class>SDTreeView</class>
+   <extends>QTreeView</extends>
+   <header>views</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>deleteFileBtn</tabstop>
+  <tabstop>downloadFileBtn</tabstop>
+  <tabstop>sdCardFolderLineEdit</tabstop>
+  <tabstop>refreshSdCardBtn</tabstop>
+  <tabstop>sdCardTreeView</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

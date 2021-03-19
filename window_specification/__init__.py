@@ -1,0 +1,1 @@
+from window_specification.canbadger_mainwindow import Ui_MainWindow

@@ -1,0 +1,8 @@
+*.pyc
+.idea/
+.DS_Store/
+venv/
+*.swp
+*.spec
+build/*
+dist/*
