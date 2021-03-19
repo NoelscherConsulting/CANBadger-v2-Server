@@ -6,10 +6,8 @@ To find out more about the hard- and firmware, please head to the firmware repos
 In this repository, you'll find the code for an application that connects to the CANBadger over Ethernet.
 It can also be used to interface with any SocketCan interface on Linux systems.
 
-# Quickstart
-Unpack the [binaries]() and run the program.
-The binaries come with all required libraries and are tested on ubuntu 20.04 and windows.
-If you want to write your custom python script to talk to the CanBadger, have a look at the [examples](https://github.com/)
+# Check Out The Wiki
+Visit this repositories [wiki](Wiki) to learn more!
 
 # Run from source
 Required packages: pip3, python3, pyside2
