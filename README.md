@@ -1,6 +1,6 @@
 # CANBadger Server v2
 The CANBadgers best friend!
-The CANBadger project is a vehicle security platform revolving about the CANBadger hardware.
+The CANBadger project is a vehicle security platform revolving around the CANBadger hardware.
 To find out more about the hard- and firmware, please head to the firmware repository.
 
 In this repository, you'll find the code for an application that connects to the CANBadger over Ethernet.
