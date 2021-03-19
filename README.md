@@ -7,7 +7,7 @@ In this repository, you'll find the code for an application that connects to the
 It can also be used to interface with any SocketCan interface on Linux systems.
 
 # Check Out The Wiki
-Visit this repositories [wiki](Wiki) to learn more!
+Visit this repositories [wiki](https://github.com/NoelscherConsulting/CANBadger-v2-Server/wiki) to learn more!
 
 # Run from source
 Required packages: pip3, python3, pyside2
