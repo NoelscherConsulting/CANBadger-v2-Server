@@ -29,7 +29,7 @@ import select
 import random
 import time
 from enum import Enum
-from canbadger_messages.ethernet_message import EthernetMessage, EthernetMessageType, ActionType
+from libcanbadger import EthernetMessage, EthernetMessageType, ActionType
 
 
 class ConnectionStatus(Enum):

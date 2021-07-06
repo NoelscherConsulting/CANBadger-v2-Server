@@ -29,7 +29,7 @@ import struct
 import threading
 import time
 import random
-from canbadger_messages import StartUdsMessage, UdsResponse, EthernetMessage, EthernetMessageType, ActionType
+from libcanbadger import EthernetMessage, EthernetMessageType, ActionType
 
 
 class SendBroadcastThread(threading.Thread):
@@ -213,6 +213,8 @@ class CanbadgerSimulator:
                     if not cl_thread.abort:
                         cl_thread.abort = True
                 if data[1] == ActionType.START_UDS:
+                    self.send_nack(sock)
+                    '''
                     print("Starting UDS session..")
                     req = StartUdsMessage.unpack(data[6:])
                     uds_session = UdsSession(req.target_diag_session)
@@ -220,6 +222,7 @@ class CanbadgerSimulator:
                     response = uds_session.requestPositive(0x10, struct.pack('<B', uds_session.level))
                     msg = UdsResponse.make_response(0x10, True, response)
                     sock.sendto(msg, (self.remote_host, self.remote_port))
+                    '''
                 if data[1] == ActionType.UDS:
                     pass
                 if data[1] == ActionType.SETTINGS:

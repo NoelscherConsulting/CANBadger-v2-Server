@@ -23,11 +23,12 @@
 
 from connections.node_connection import *
 from connections import SocketCanConnection
-from helpers import *
-from PySide2.QtCore import QMutex, QTimer, QThread
-import time
+from helpers import buttonFeedback
+from PySide2.QtCore import QMutex, QTimer
+from PySide2.QtNetwork import QUdpSocket, QHostAddress
+import datetime
 
-##
+
 # handle discovery and connection of nodes
 class NodeHandler(QObject):
 
@@ -66,7 +67,7 @@ class NodeHandler(QObject):
         self.disconnectTimer = QTimer(self)
         self.disconnectTimer.moveToThread(self.thread())
         self.disconnectTimer.timeout.connect(self.onDisconnectTimerFire)
-        self.disconnectTimer.start(1000)
+        self.disconnectTimer.start(100)
 
 
     @Slot()
@@ -127,13 +128,13 @@ class NodeHandler(QObject):
         ids_to_delete = []
         for id, node in self.connectedNodes.items():
             # check time difference
-            if (now - node["last_seen"]) > datetime.timedelta(seconds=6):
+            if (now - node["last_seen"]) > datetime.timedelta(seconds=10):
                 ids_to_delete.append(id)
                 self.nodeDisconnected.emit(node)
         for id in ids_to_delete:
-            # check for running logger process
-            if self.connectedNodes[id]["connection"].logger_process is not None:
-                self.connectedNodes[id]["connection"].stopCurrentAction()
+            # check for running connection process
+            if self.connectedNodes[id]["connection"].isConnected:
+                self.connectedNodes[id]["connection"].resetConnection()
             del self.connectedNodes[id]
         self.nodeListMutex.unlock()
 
@@ -145,8 +146,9 @@ class NodeHandler(QObject):
             con = NodeConnection(node)
             node["connection"] = con
             con.connectionSucceeded.connect(self.onConnectionSucceeded)
+            con.connectionFailed.connect(self.onConnectionFailed)
             con.newSettingsData.connect(self.mainwindow.onSettingsReceived)
-            self.mainwindow.exiting.connect(con.cleanup)
+            self.mainwindow.exiting.connect(con.resetConnection)
 
             con.onRun()
 
@@ -155,6 +157,7 @@ class NodeHandler(QObject):
             con = SocketCanConnection(node)
             node["connection"] = con
             con.connectionSucceeded.connect(self.onConnectionSucceeded)
+            con.connectionFailed.connect(self.onConnectionFailed)
             self.mainwindow.exiting.connect(con.cleanup)
 
             con.onRun()
@@ -172,6 +175,12 @@ class NodeHandler(QObject):
         self.nodeConnected.emit(node)
         node_connection.nodeDisconnected.connect(self.onDisconnectNode)
 
+    @Slot()
+    def onConnectionFailed(self):
+        # signal red
+        buttonFeedback(False, self.mainwindow.interfaceSelection)
+
+
     @Slot(dict)
     def onDisconnectNode(self, node):
         # reset connection and terminate thread
@@ -181,7 +190,7 @@ class NodeHandler(QObject):
             node["thread"].exit()
             pass
 
-        # move the node from the connected nodes to the visible nodes (to keep the thread object)
+        # delete the node from dicts
         self.nodeListMutex.lock()
         if node["id"] in self.connectedNodes:
             del self.connectedNodes[node["id"]]

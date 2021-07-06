@@ -26,10 +26,10 @@ import struct
 import time
 import sys
 
-from canbadger_messages.ethernet_message import EthernetMessage, EthernetMessageType, ActionType
-from canbadger_messages.start_uds_message import StartUdsMessage
-from canbadger_messages.uds_response import UdsResponse
-from canbadger_messages.uds_request import UdsRequest
+from canbadger_api.ethernet_message import EthernetMessage, EthernetMessageType, ActionType
+from canbadger_api.start_uds_message import StartUdsMessage
+from canbadger_api.uds_response import UdsResponse
+from canbadger_api.uds_request import UdsRequest
 from canbadger.canbadger_defines import CanbadgerInterface, CANFormat, AddressingType
 
 #NODE_IP = "10.0.0.113"

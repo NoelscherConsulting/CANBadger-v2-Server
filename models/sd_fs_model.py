@@ -129,9 +129,14 @@ class SD_FS_Model(QAbstractItemModel):
         item = FS_Item(name, is_dir=is_dir, parent=parent_item)
 
         # send insert signals and append child
-        self.beginInsertRows(index, parent_item.child_count(), parent_item.child_count())
-        parent_item.append_child(item)
-        self.endInsertRows()
+        if index is not None:
+
+            self.beginInsertRows(index, parent_item.child_count(), parent_item.child_count())
+            parent_item.append_child(item)
+            self.endInsertRows()
+        else:
+            print(f"heres the bug: \n {item.name} \n {item.get_filepath()}")
+
 
     def remove_item(self, index: QModelIndex):
         # cant remove root

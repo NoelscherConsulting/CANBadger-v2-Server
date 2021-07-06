@@ -26,9 +26,9 @@ import struct
 import time
 import sys
 
-from canbadger_messages.ethernet_message import EthernetMessage, EthernetMessageType, ActionType
-from canbadger_messages.security_hijack_message import SecurityHijackMessage
-from canbadger_messages.security_hijack_response import SecurityHijackResponse
+from canbadger_api.ethernet_message import EthernetMessage, EthernetMessageType, ActionType
+from canbadger_api.security_hijack_message import SecurityHijackMessage
+from canbadger_api.security_hijack_response import SecurityHijackResponse
 from canbadger.canbadger_defines import CanbadgerInterface, CANFormat, AddressingType
 
 #NODE_IP = "10.0.0.113"

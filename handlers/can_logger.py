@@ -29,7 +29,9 @@ from helpers.can_parser import *
 from models.can_logger_sort_model import *
 from delegates.frame_delegate import *
 from helpers import *
-from canbadger_messages import EthernetMessage
+from libcanbadger import EthernetMessage, EthernetMessageType
+from exceptions import UnhandledEthernetMessageException
+from queue import Empty
 import csv
 
 
@@ -77,22 +79,25 @@ class CanLogger(QObject):
         if self.current_node_connection is None:
             return
 
-        num_items = self.current_node_connection.data_queue.qsize()
-        for _ in range(0, num_items):
-            ethMsg = self.current_node_connection.data_queue.get()
-            self.cnt += 1
+        while True:
+            try:
+                ethMsg = self.current_node_connection.data_queue.get_nowait()
+                self.cnt += 1
 
-            if type(ethMsg) == EthernetMessage:
-                # parse EthernetMessage received from the canbadger
-                frame = self.can_parser.parseToCanFrame(ethMsg.data)
-            else:
-                # data is tuple comping from socketCan, construct new CanFrame from it
-                (can_id, timestamp, data_len, data) = ethMsg
-                frame = self.can_parser.constructCanFrame(can_id, data_len, data, timestamp=timestamp)
-            self.model.add_frame(QModelIndex(), frame)
+                if type(ethMsg) == EthernetMessage:
+                    if ethMsg.msg_type != EthernetMessageType.DATA:
+                        raise UnhandledEthernetMessageException(message_type=ethMsg.msg_type, action_type=ethMsg.action_type)
+                    # parse EthernetMessage received from the canbadger
+                    frame = self.can_parser.parseToCanFrame(ethMsg.data)
+                else:
+                    # data is tuple comping from socketCan, construct new CanFrame from it
+                    (can_id, timestamp, data_len, data) = ethMsg
+                    frame = self.can_parser.constructCanFrame(can_id, data_len, data, timestamp=timestamp)
+                self.model.add_frame(QModelIndex(), frame)
+            except Empty:
+                break
 
-        # if we have the compact view enabled we need to reset the view on new data
-        # removing rows that are now invalid could be more performant
+        # call filters to have them updated
         if self.countSortProxy.filteringEnabled and self.countSortProxy.compactFilter:
             self.filterFrames()
 
@@ -131,6 +136,8 @@ class CanLogger(QObject):
 
     @Slot()
     def onStopCanLogger(self):
+        self.data_timer.stop()
+        self.scroll_timer.stop()
         self.cnt = 0
         self.stopped = True
         # gracefullyDisconnectSignal(self.mainwindow.selectedNode['connection'].newDataMessage)
@@ -143,8 +150,7 @@ class CanLogger(QObject):
         self.mainwindow.canLogView.resizeColumnToContents(2)
         self.mainwindow.canLogView.setSortingEnabled(True)
         self.filterFrames()
-        self.data_timer.stop()
-        self.scroll_timer.stop()
+
 
     @Slot(str)
     def onNewData(self, data):

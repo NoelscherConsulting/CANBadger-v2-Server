@@ -39,20 +39,20 @@ class CanParser:
     ##
     # data is supposed to be a bytes object
     def parseSingleFrame(self, data: bytes):
-        busno, timestamp, id, speed, len = self.unpack_unpack_can_header(data[:14])
+        busno, timestamp, arbid, speed, length = self.unpack_unpack_can_header(data[:14])
 
-        payload = data[14:14 + len]
-        return {'id': id, 'payload': payload, 'busno': busno, 'timestamp': timestamp}
+        payload = data[14:14 + length]
+        return {'id': arbid, 'payload': payload, 'busno': busno, 'timestamp': timestamp}
 
     # parse the data into a can frame
     def parseToCanFrame(self, data: bytes):
-        pbyte, timestamp, id, speed, len = self.unpack_unpack_can_header(data[:14])
-        payload = data[14:14 + len]
-        interface_no, format = CanFrame.parse_protocol_byte(pbyte)
-        return CanFrame(interface_no, format, timestamp, id, speed, len, payload)
+        pbyte, timestamp, arbid, speed, length = self.unpack_unpack_can_header(data[:14])
+        payload = data[14:14 + length]
+        interface_no, frame_format = CanFrame.parse_protocol_byte(pbyte)
+        return CanFrame(interface_no, frame_format, timestamp, arbid, speed, length, payload)
 
     # returns a CanFrame from all the arguments given
-    def constructCanFrame(self, id, data_len, data, timestamp=None, speed=None, interface=None):
+    def constructCanFrame(self, arbid, data_len, data, timestamp=None, speed=None, interface=None):
         if speed is None:
             speed = 0
         if timestamp is None:
@@ -60,5 +60,5 @@ class CanParser:
         if interface is None:
             interface = 1
 
-        return CanFrame(interface, CanFormat.Standard, timestamp, id, speed, data_len, data)
+        return CanFrame(interface, CanFormat.Standard, timestamp, arbid, speed, data_len, data)
 

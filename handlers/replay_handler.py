@@ -28,7 +28,7 @@ import time
 from connections.node_connection import *
 from helpers import *
 from models import CanLoggerTableModel
-from canbadger_messages.ethernet_message import EthernetMessageType, ActionType
+from libcanbadger import EthernetMessageType, ActionType
 
 
 class ReplayHandler(QObject):
@@ -142,7 +142,7 @@ class ReplayHandler(QObject):
         cnt, command = self.replayList[0]
 
         # send one replay command
-        connection.sendMessage(
+        connection.sendEthernetMessage(
             EthernetMessage(EthernetMessageType.ACTION, ActionType.START_REPLAY, len(command), command))
 
         if cnt > 1:
@@ -198,9 +198,7 @@ class ReplayHandler(QObject):
     @Slot()
     def onAddReplayFrameClicked(self):
         if self.mainwindow.selectedNode is not None:
-            self.model.addFrame([0, 0, b"", 1])
-            #self.selectionModel.select(self.model.createIndex(self.model.rowCount() - 1, 0),
-            #                           QItemSelectionModel.SelectCurrent)
+            self.model.addFrame([1, 0, b"", 1])
 
     @Slot(int)
     def onTabChanged(self, index):

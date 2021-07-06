@@ -24,7 +24,7 @@
 from PySide2.QtCore import *
 from PySide2.QtWidgets import QFileDialog, QListWidgetItem, QAbstractItemView
 
-from canbadger_messages.ethernet_message import EthernetMessage, EthernetMessageType, ActionType
+from libcanbadger import EthernetMessage, EthernetMessageType, ActionType
 from helpers import *
 from models import SD_FS_Model
 import struct
@@ -70,7 +70,7 @@ class SdHandler(QObject):
         if self.fileModel.is_filled() and caller == "tab":
             return
 
-        # create a new model to holt the new data
+        # create a new model to hold the new data
         self.fileModel = SD_FS_Model(self.fileBrowser)
         self.fileBrowser.setModel(self.fileModel)
         self.fileBrowser.selectionModel().currentChanged.connect(self.onSelectionChange)
@@ -84,7 +84,7 @@ class SdHandler(QObject):
 
         self.busy = True
         connection.newDataMessage.connect(self.onGotUpdateResponse)
-        connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.UPDATE_SD, 0, None))
+        connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.UPDATE_SD, 0, b''))
 
     # send the filepath we want downloaded to the canbadger
     @Slot()
@@ -115,7 +115,7 @@ class SdHandler(QObject):
         # set self busy and send command to canbadger
         self.busy = True
         filepath = (item.get_filepath() + '\0').encode('ascii')  # get null terminated filepath
-        connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.DOWNLOAD_FILE,
+        connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.DOWNLOAD_FILE,
                                                len(filepath), filepath))
 
     # send the filepath we want deleted to the canbadger
@@ -140,7 +140,7 @@ class SdHandler(QObject):
         self.busy = True
         filepath = (item.get_filepath() + '\0').encode('ascii')  # get null terminated filepath
         self.monitored_filepath = item.get_filepath()
-        connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.DELETE_FILE,
+        connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.DELETE_FILE,
                                                len(filepath), filepath))
 
     @Slot(str)
@@ -201,7 +201,7 @@ class SdHandler(QObject):
         connection.nackReceived.connect(self.onUploadError)
 
         self.busy = True
-        connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.UPDATE_SD,
+        connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.UPDATE_SD,
                                                len(filepath), filepath))
 
     @Slot()
@@ -224,7 +224,7 @@ class SdHandler(QObject):
         connection = self.mainwindow.selectedNode["connection"]
         if connection is None:
             return
-        connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.EEPROM_WRITE, len(name),
+        connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.EEPROM_WRITE, len(name),
                                                name.encode('ascii')))
 
     # HANDLE GUI
@@ -255,17 +255,14 @@ class SdHandler(QObject):
         # if we get a valid index, select it
         self.fileBrowser.selectionModel().select(index, QItemSelectionModel.ClearAndSelect)
 
-
-
-
     # HANDLE RESPONSES
 
     # handle sd contents update
     @Slot(object)
     def onGotUpdateResponse(self, data):
         connection = self.mainwindow.selectedNode["connection"]
-        delim = data.index(b'\x00')
 
+        delim = data.index(b'\x00')
         if delim == 0:
             # no more sd content incoming
             gracefullyDisconnectSignal(connection.newDataMessage)
@@ -282,6 +279,9 @@ class SdHandler(QObject):
 
         # get the index to the parent dir
         add_index = self.fileModel.index_for_path(parent_dir)
+
+        if add_index is None:
+            print("this subdir is non existent")
 
         data = data[delim + 1:]
 
@@ -310,7 +310,7 @@ class SdHandler(QObject):
     # ack while downloading means transmission is done
     @Slot()
     def onDownloadAck(self):
-        # download finishedFalse
+        # download finished
         self.stillDownloading = False
         self.busy = False
 
@@ -376,7 +376,7 @@ class SdHandler(QObject):
         # check if we have data left to send
         if not self.transmissionData:
             # no data left to send, send STOP_CURRENT_ACTION, canbadger will close file handle
-            connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.STOP_CURRENT_ACTION, 0, b''))
+            connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.STOP_CURRENT_ACTION, 0, b''))
             self.busy = False
 
             # signal success and disconnect signals
@@ -409,7 +409,7 @@ class SdHandler(QObject):
         # combine message and send
         message = struct.pack('<IB', self.packet_number, len(packet_data)) + packet_data
         self.packet_number += 1
-        connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.UPDATE_SD, len(message), message))
+        connection.sendEthernetsMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.UPDATE_SD, len(message), message))
 
     # received a NACK while uploading
     def onUploadError(self):
@@ -434,8 +434,10 @@ class SdHandler(QObject):
             return False
 
         # check if the logger is currently running
+        '''
         if self.mainwindow.selectedNode["connection"].logger_process is not None:
             return False
+        '''
 
         if command == "download" or command == "delete":
             # check if a filesystem item is selected

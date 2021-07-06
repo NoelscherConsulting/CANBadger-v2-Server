@@ -25,7 +25,7 @@ from PySide2.QtWidgets import QAbstractItemView, QFileDialog, QToolTip
 from bitstring import *
 from copy import *
 
-from canbadger_messages.ethernet_message import EthernetMessage, EthernetMessageType, ActionType
+from libcanbadger import EthernetMessage, EthernetMessageType, ActionType
 from models.mitm_table_model import *
 from helpers import *
 from canbadger import StatusBits
@@ -282,7 +282,7 @@ class MITMHandler(QObject):
         connection.nackReceived.connect(self.onRuleReceiveError)
 
         # send command
-        connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.RECEIVE_RULES, 0, b''))
+        connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.RECEIVE_RULES, 0, b''))
 
     def sendNextRule(self):
         node = self.mainwindow.selectedNode
@@ -308,7 +308,7 @@ class MITMHandler(QObject):
             connection.ackReceived.connect(self.onAllRulesTransmitted)
 
         # send rule previously selected
-        connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.ADD_RULE, len(payload), payload))
+        connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.ADD_RULE, len(payload), payload))
 
     # start MITM mode from rulefile
     @Slot()
@@ -337,7 +337,7 @@ class MITMHandler(QObject):
         connection.nackReceived.connect(self.onMITMFileError)
 
         # send command
-        connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.ENABLE_MITM_MODE, len(msg_data),
+        connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.ENABLE_MITM_MODE, len(msg_data),
                                                msg_data))
 
     # stop MITM execution on the canbadger
@@ -347,7 +347,7 @@ class MITMHandler(QObject):
         if node is not None:
             # send command
             connection = node['connection']
-            connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.STOP_CURRENT_ACTION, 0, b''))
+            connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.STOP_CURRENT_ACTION, 0, b''))
 
         # switch button functionality
 
@@ -370,7 +370,7 @@ class MITMHandler(QObject):
         connection = node['connection']
         gracefullyDisconnectSignal(connection.ackReceived)
         gracefullyDisconnectSignal(connection.nackReceived)
-        self.buttonFeedback(True, self.mainwindow.MITMFileButton)
+        buttonFeedback(True, self.mainwindow.MITMFileButton)
 
     # mitm start from rulefile failed
     @Slot()
@@ -381,7 +381,7 @@ class MITMHandler(QObject):
         connection = node['connection']
         gracefullyDisconnectSignal(connection.ackReceived)
         gracefullyDisconnectSignal(connection.nackReceived)
-        self.buttonFeedback(False, self.mainwindow.MITMFileButton)
+        buttonFeedback(False, self.mainwindow.MITMFileButton)
 
     # canbadger failed persisting mitm rule, abort
     @Slot()
@@ -392,7 +392,7 @@ class MITMHandler(QObject):
         connection = node['connection']
         gracefullyDisconnectSignal(connection.ackReceived)
         gracefullyDisconnectSignal(connection.nackReceived)
-        self.buttonFeedback(False, self.mainwindow.startMITMButton)
+        buttonFeedback(False, self.mainwindow.startMITMButton)
         self.onStopMitm()
 
     # canbadger is ready to receive next rule
@@ -410,8 +410,8 @@ class MITMHandler(QObject):
         gracefullyDisconnectSignal(connection.ackReceived)
         gracefullyDisconnectSignal(connection.nackReceived)
 
-        self.buttonFeedback(True, self.mainwindow.startMITMButton)
-        connection.sendMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.MITM, 0, b''))
+        buttonFeedback(True, self.mainwindow.startMITMButton)
+        connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.MITM, 0, b''))
 
     # GUI CALLBACKS
 
@@ -543,16 +543,8 @@ class MITMHandler(QObject):
     def displayRuleSaveResult(self, result):
         gracefullyDisconnectSignal(self.mainwindow.sdHandler.upload_result)
 
-        self.buttonFeedback(result, self.mainwindow.saveRulesBtn)
+        buttonFeedback(result, self.mainwindow.saveRulesBtn)
 
-    @Slot(bool)
-    def buttonFeedback(self, result, button):
-        if result:
-            button.setStyleSheet("background-color: green")
-        else:
-            button.setStyleSheet("background-color: red")
-
-        QTimer.singleShot(300, lambda: button.setStyleSheet(""))
 
 
 

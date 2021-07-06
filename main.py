@@ -26,14 +26,15 @@ import platform
 from PySide2.QtWidgets import QMainWindow
 
 from handlers.can_logger import *
-from handlers.hijack_handler import *
 from handlers.mitm_handler import *
 from handlers.sd_handler import *
 from handlers.replay_handler import *
 from handlers.settings_handler import *
+from handlers.node_handler import *
 from helpers import *
 from window_specification import Ui_MainWindow
 from canbadger import StatusBits
+from multiprocessing import freeze_support
 
 
 def can_filter(if_name):
@@ -265,18 +266,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @Slot(object)
     def onSettingsReceived(self, msg_data):
+        # extract id
         id_length = msg_data[0]
         if id_length < 0 or id_length > 18:
             return  # invalid length
         canbadger_id = msg_data[1:id_length+1].decode('ascii')
+        self.selectedNode["id"] = canbadger_id
 
-        if len(msg_data[id_length+1:]) != 6*4:
+        # extract ip string
+        ip_length = msg_data[id_length + 1]
+        speeds_start = id_length + ip_length + 2
+        settings_ip_string = msg_data[id_length + 2:speeds_start]
+        self.selectedNode["settings_ip_string"] = settings_ip_string
+
+        if len(msg_data[speeds_start:]) != 6*4:
             return  # rest of the message is wrong length
 
         # display the recieved settings to the user
-        self.selectedNode["id"] = canbadger_id
         self.nodeIdLineEdit.setText(self.selectedNode["id"])
-        settings, spi_speed, can1speed, can2speed, kl1spd, kl2spd = struct.unpack('<IIIIII', msg_data[id_length+1:])
+        settings, spi_speed, can1speed, can2speed, kl1spd, kl2spd = struct.unpack('<IIIIII', msg_data[speeds_start:])
         self.CAN1SpeedSelection.setCurrentIndex(self.CAN1SpeedSelection.findText("%d" % can1speed, Qt.MatchContains))
         self.CAN2SpeedSelection.setCurrentIndex(self.CAN2SpeedSelection.findText("%d" % can2speed, Qt.MatchContains))
         self.CAN1SpeedSelection.removeItem(self.CAN1SpeedSelection.findText("", Qt.MatchExactly))
@@ -317,11 +325,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # send settings to canbadger
         payload = len(self.selectedNode["id"]).to_bytes(1, 'big') + bytes(self.selectedNode["id"], 'ascii')
+        payload += len(self.selectedNode["settings_ip_string"]).to_bytes(1, 'big') + self.selectedNode["settings_ip_string"]
         payload += struct.pack('<%dI' % len(self.selectedNode["settings"]), *self.selectedNode["settings"])
         eth_msg = EthernetMessage(EthernetMessageType.ACTION, ActionType.SETTINGS, len(payload), payload)
 
         # send settings to canbadger
-        self.selectedNode["connection"].sendEthernetMessage(eth_msg, waitForAck=True)
+        self.selectedNode["connection"].sendEthernetMessage(eth_msg)
 
     @Slot()
     def onSaveSettingsOnEEPROM(self):
@@ -373,7 +382,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         connection = self.selectedNode['connection']
         if connection is None:
             return
-        connection.sendEthernetMessage(EthernetMessage(EthernetMessageType.ACTION, ActionType.RESET, 0, b''))
 
         # disconnect from CB on GUI side
         self.disconnectNode.emit(self.selectedNode)
@@ -403,6 +411,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 if __name__ == '__main__':
+    freeze_support()
     app = QApplication(sys.argv)
     mainWin = MainWindow()
     ret = app.exec_()

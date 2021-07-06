@@ -1,5 +1,5 @@
 #####################################################################################
-# CanBadger Replay Example                                                          #
+# CanBadger Unhandled Ethernet Exception                                            #
 # Copyright (c) 2020 Noelscher Consulting GmbH                                      #
 #                                                                                   #
 # Permission is hereby granted, free of charge, to any person obtaining a copy      #
@@ -21,29 +21,18 @@
 # THE SOFTWARE.                                                                     #
 #####################################################################################
 
-import socket
-import struct
-import time
+# can be thrown by a handler that receives a bad type or action type that its not supposed to handle
 
-from canbadger_api.ethernet_message import EthernetMessage, EthernetMessageType, ActionType
-
-NODE_IP = "10.0.0.125"
-#NODE_IP="127.0.0.1"
-PORT = 13371
-tport = 15555  # we will get msgs from cb after connect here
-sock = socket.socket(socket.AF_INET,  # Internet
-                     socket.SOCK_DGRAM) # UDP
-sock.bind(('0.0.0.0', tport))
-sock.sendto(b'\x04' + b'\x00' + struct.pack('<I', 4) + struct.pack('<I', tport) + b'\x00',
-            (NODE_IP, PORT))
-# receive ack
-ack = sock.recvfrom(128)
-print(ack)
-
-# send a few frames
-sock.sendto(EthernetMessage(EthernetMessageType.ACTION, ActionType.START_REPLAY, 12, b'00112233445566778800cafe').serialize(), (NODE_IP, PORT))
-sock.sendto(EthernetMessage(EthernetMessageType.ACTION, ActionType.START_REPLAY, 12, b'cafe11223344556677889900').serialize(), (NODE_IP, PORT))
-# stop replay mode
-time.sleep(0.1)
-sock.sendto(EthernetMessage(EthernetMessageType.ACTION, ActionType.STOP_CURRENT_ACTION, 0, '').serialize(), (NODE_IP, PORT))
-
+class UnhandledEthernetMessageException(Exception):
+    def __init__(self, message_type=None, action_type=None):
+        if message_type is not None:
+            if action_type is not None:
+                self.message = f"Can't handle EthernetMessage of type {message_type.name} with action type {action_type.name}."
+            else:
+                self.message = f"Can't handle EthernetMessage of type {message_type.name}."
+        else:
+            if action_type is not None:
+                self.message = f"Can't handle EthernetMessage with action type {action_type.name}."
+            else:
+                self.message = f"Can't handle unfit EthernetMessage due to type or action."
+        super().__init__(self.message)

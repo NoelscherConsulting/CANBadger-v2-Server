@@ -31,3 +31,12 @@ def gracefullyDisconnectSignal(t_signal):
             t_signal.disconnect()
         except RuntimeError:
             pass
+
+@Slot(bool)
+def buttonFeedback(result, button):
+    if result:
+        button.setStyleSheet("background-color: green")
+    else:
+        button.setStyleSheet("background-color: red")
+
+    QTimer.singleShot(300, lambda: button.setStyleSheet(""))

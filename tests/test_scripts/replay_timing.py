@@ -22,7 +22,7 @@
 #####################################################################################
 
 from socket import *
-from canbadger_messages import EthernetMessage, EthernetMessageType, ActionType
+from libcanbadger import EthernetMessage, EthernetMessageType, ActionType
 import struct
 import sys
 import time
@@ -87,17 +87,23 @@ def print_statistics(values, name, ns = None, bins = None):
 # script vars
 canbadger_ip = '10.0.0.125'
 
-# bind udp socket to 13370 for connection request
+
+tcp_sock = socket(AF_INET, SOCK_STREAM)
+tcp_sock.bind(('', 13372))
+tcp_sock.listen(1)
+
+
+
+# extra udp socket to send CONNECT over udp
 conn_sock = socket(AF_INET, SOCK_DGRAM)
 conn_sock.bind(('', 13370))
 
-# extra socket to send commands and receive data
-comm_sock = socket(AF_INET, SOCK_DGRAM)
-comm_sock.bind(('', 13372))
-
-# connection request and answer
+# connection request
 conn_sock.sendto(EthernetMessage(EthernetMessageType.CONNECT, ActionType.NO_TYPE, 4, struct.pack('<I', 13372)).serialize(), (canbadger_ip, 13371))
-answer, address = comm_sock.recvfrom(1024)
+conn, address = tcp_sock.accept()
+
+
+answer = conn.recv(1024)
 answer = EthernetMessage.unserialize(answer)
 if answer.msg_type != EthernetMessageType.ACK:
     print('Connection not accepted!')
@@ -105,22 +111,29 @@ if answer.msg_type != EthernetMessageType.ACK:
 print('Connected!')
 time.sleep(0.5)
 
+
 # get the settings
 print("Timing settings requests!")
 count = 0
 settings_timing = []
-while count < 100:
+while count < 1:
     count += 1
-    comm_sock.sendto(EthernetMessage(EthernetMessageType.ACTION, ActionType.SETTINGS, 0, b'').serialize(), address)
+    conn.sendto(EthernetMessage(EthernetMessageType.ACTION, ActionType.SETTINGS, 0, b'').serialize(), address)
     settings_requested = time.perf_counter()
-    settings = EthernetMessage.unserialize(comm_sock.recv(1024), True).data
+    settings = EthernetMessage.unserialize(conn.recv(1024), True).data
     settings_received = time.perf_counter()
     settings_timing.append(round(settings_received - settings_requested, 5) * 1000)
     time.sleep(0.2)
 
+# sending bullshit to test it
+conn.send(EthernetMessage(EthernetMessageType.ACTION, ActionType.LED, 0, b'').serialize())
+conn.send(EthernetMessage(EthernetMessageType.ACTION, ActionType.RELAY, 0, b'').serialize())
+conn.send(EthernetMessage(EthernetMessageType.ACTION, ActionType.UPDATE_SD, 0, b'').serialize())
+conn.send(EthernetMessage(EthernetMessageType.ACTION, ActionType.LED, 0, b'').serialize())
+
 
 # send logging command
-comm_sock.sendto(EthernetMessage(EthernetMessageType.ACTION, ActionType.LOG_RAW_CAN_TRAFFIC, 0, b'').serialize(), address)
+conn.sendto(EthernetMessage(EthernetMessageType.ACTION, ActionType.LOG_RAW_CAN_TRAFFIC, 0, b'').serialize(), address)
 time.sleep(0.3)
 
 # build replay message
@@ -141,26 +154,32 @@ replay_frame_time = []
 received_frame_time = []
 
 # send replays and track timing
-while count < 500:
+while count < 20:
 
-    comm_sock.sendto(replay_command, address)
+    conn.sendto(replay_command, address)
     command_sent.append(time.perf_counter())
-
-    answer = EthernetMessage.unserialize(comm_sock.recv(1024), True)
-    replay_frame_time.append(time.perf_counter())
     count += 1
+    time.sleep(0.001)
+'''
+    answer = EthernetMessage.unserialize(conn.recv(1024), True)
+    replay_frame_time.append(time.perf_counter())
+    
     print_formatted_log(answer.data, count)
 
-    answer = EthernetMessage.unserialize(comm_sock.recv(1024), True)
+    answer = EthernetMessage.unserialize(conn.recv(1024), True)
     received_frame_time.append(time.perf_counter())
     count += 1
     print_formatted_log(answer.data, count)
-
-    time.sleep(0.1)
+'''
+# REMOVE THIS
+replay_message = interface + id + struct.pack("%ds" % 8, bytes.fromhex('aabbccddeeff1122'))
+conn.sendto(EthernetMessage(EthernetMessageType.ACTION, ActionType.RELAY, 0, b'').serialize(), address)
+print("sent long message")
 
 # send STOP to cb
-comm_sock.sendto(EthernetMessage(EthernetMessageType.ACTION, ActionType.STOP_CURRENT_ACTION, 0, b'').serialize(), address)
+conn.sendto(EthernetMessage(EthernetMessageType.ACTION, ActionType.STOP_CURRENT_ACTION, 0, b'').serialize(), address)
 
+conn.close()
 
 # calculate delays
 command_delays = []
